@@ -1,4 +1,5 @@
 import { Task } from './Task'
+import dragula from 'dragula'
 
 export class TaskRenderer {
   constructor(
@@ -6,6 +7,15 @@ export class TaskRenderer {
     private readonly doingList: HTMLElement,
     private readonly doneList: HTMLElement
   ) {}
+
+  subscribeDragAndDrop() {
+    dragula([this.todoList, this.doingList, this.doneList]).on('drop', (el, target, source, sibling) => {
+      console.log(el);
+      console.log(target);
+      console.log(source);
+      console.log(sibling);
+    })
+  }
 
   append(task: Task) {
     const { taskEl, deleteButtonEl } = this.render(task)
