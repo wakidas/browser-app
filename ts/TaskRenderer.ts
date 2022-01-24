@@ -1,7 +1,11 @@
 import { Task } from './Task'
 
 export class TaskRenderer {
-  constructor(private readonly todoList: HTMLElement) { }
+  constructor(
+    private readonly todoList: HTMLElement,
+    private readonly doingList: HTMLElement,
+    private readonly doneList: HTMLElement
+  ) {}
 
   append(task: Task) {
     const { taskEl, deleteButtonEl } = this.render(task)
@@ -9,6 +13,14 @@ export class TaskRenderer {
     this.todoList.append(taskEl)
 
     return { deleteButtonEl }
+  }
+
+  remove(task: Task) {
+    const taskEl = document.getElementById(task.id)
+
+    if (!taskEl) return 
+
+    this.todoList.removeChild(taskEl)
   }
 
   private render(task: Task) {

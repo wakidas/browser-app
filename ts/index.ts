@@ -7,7 +7,9 @@ class Application {
   private readonly eventListener = new EventListener()
   private readonly taskColleciotn = new TaskCollection()
   private readonly taskRenderer = new TaskRenderer(
-    document.getElementById('todoList') as HTMLElement
+    document.getElementById('todoList') as HTMLElement,
+    document.getElementById('doingList') as HTMLElement,
+    document.getElementById('doneList') as HTMLElement
   )
   
   start() {
@@ -40,7 +42,9 @@ class Application {
   private handleClickDeleteTask = (task: Task) => {
     if (!window.confirm(`「${task.title}」を削除してもよろしいですか？`)) return
     
-    console.log(task);
+    this.eventListener.remove(task.id)
+    this.taskColleciotn.delete(task)
+    this.taskRenderer.remove(task)
     
   }
 }
