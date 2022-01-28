@@ -72,13 +72,17 @@ class Application {
     titleInput.value = "";
   };
 
+  private executeDeleteTask = (task: Task) => {
+    this.eventListener.remove(task.id);
+    this.taskColleciotn.delete(task);
+    this.taskRenderer.remove(task);
+  };
+
   private handleClickDeleteTask = (task: Task) => {
     if (!window.confirm(`「${task.title}」を削除してもよろしいですか？`))
       return;
 
-    this.eventListener.remove(task.id);
-    this.taskColleciotn.delete(task);
-    this.taskRenderer.remove(task);
+    this.executeDeleteTask(task);
   };
 
   private handleClickDeleteAllTasks = () => {
@@ -87,7 +91,7 @@ class Application {
 
     const doneTasks = this.taskColleciotn.filter(statusMap.done);
 
-    console.log(doneTasks);
+    doneTasks.forEach((task) => this.executeDeleteTask(task));
   };
 }
 
