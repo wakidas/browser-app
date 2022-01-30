@@ -13,10 +13,17 @@ class Application {
   );
 
   start() {
+    const taskItems = this.taskRenderer.renderAll(this.taskColleciotn);
     const createForm = document.getElementById("createForm") as HTMLElement;
     const deleteAllDoneTaskButton = document.getElementById(
       "deleteAllDoneTask"
     ) as HTMLElement;
+
+    taskItems.forEach(({ task, deleteButtonEl }) => {
+      this.eventListener.add(task.id, "click", deleteButtonEl, () =>
+        this.handleClickDeleteTask(task)
+      );
+    });
 
     this.eventListener.add(
       "submit-handler",
@@ -51,7 +58,19 @@ class Application {
     task.update({ status: newStatus });
     this.taskColleciotn.update(task);
 
-    console.log(sibling);
+    if (sibling) {
+      const nextTaskId = this.taskRenderer.getId(sibling);
+
+      if (!nextTaskId) return;
+
+      const nextTask = this.taskColleciotn.find(nextTaskId);
+
+      if (!nextTask) return;
+
+      this.taskColleciotn.modeAboveTarget(task, nextTask);
+    } else {
+      this.taskColleciotn.moveToLast(task);
+    }
   };
 
   private handleSubmit = (e: Event) => {
